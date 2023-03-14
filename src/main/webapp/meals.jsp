@@ -22,6 +22,8 @@
 <body>
 
 <h2>Meals</h2>
+<a href="meals?action=create">Add meal</a>
+<br>
 <table border="1" cellpadding="8" cellspacing="0">
 	<c:set var="meals" value = "${requestScope.meals}"/>
 	<thead>
@@ -30,13 +32,15 @@
 				<th>Description</th>
 				<th>Calories</th>
 			</tr>
-		</thead>
+	</thead>
 		<c:forEach items="${meals}" var="meal">
 			<jsp:useBean id="meal" type="ru.javawebinar.topjava.model.MealTo"/>
 			<tr class="${meal.excess ? 'exceed' : 'normal'}">
 				<td>${meal.date} ${meal.time}</td>
 				<td>${meal.description}</td>
 				<td>${meal.calories}</td>
+				<td><a href="meals?action=update&id=${meal.id}">Edit</a></td>
+				<td><a href="meals?action=delete&id=${meal.id}">Delete</a></td>
 			</tr>
 		</c:forEach>
 	</table>

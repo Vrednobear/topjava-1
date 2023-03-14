@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -31,11 +32,7 @@ public class MealsUtil {
                 Collectors.groupingBy(Meal::getDate, Collectors.summingInt(Meal::getCalories)));
     }
 
-    private static MealTo createTo(Meal meal, boolean excess) {
-        return new MealTo(meal.getDateTime(), meal.getDescription(), meal.getCalories(), excess);
-    }
-
-    public static List<MealTo> getTos(List<Meal> meals, int caloriesPerDay){
+    public static List<MealTo> getTos(Collection<Meal> meals, int caloriesPerDay){
         return filterByPredicate(meals, caloriesPerDay, meal -> true);
     }
 
@@ -44,7 +41,7 @@ public class MealsUtil {
            TimeUtil.isBetweenHalfOpen(meal.getTime(), startTime, endTime));
     }
 
-    private static List<MealTo> filterByPredicate(List<Meal> meals, int caloriesPerDay, Predicate<Meal> filter){
+    private static List<MealTo> filterByPredicate(Collection<Meal> meals, int caloriesPerDay, Predicate<Meal> filter){
         Map<LocalDate, Integer> caloriesSumByDate = meals.stream()
                 .collect(
                         Collectors.groupingBy(Meal::getDate, Collectors.summingInt(Meal::getCalories))
@@ -55,6 +52,10 @@ public class MealsUtil {
                 .filter(filter)
                 .map(meal -> createTo(meal, caloriesSumByDate.get(meal.getDate()) > caloriesPerDay))
                 .collect(Collectors.toList());
+    }
+
+    private static MealTo createTo(Meal meal, boolean excess) {
+        return new MealTo(meal.getId(), meal.getDateTime(), meal.getDescription(), meal.getCalories(), excess);
     }
 
 }
