@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.util;
 
 import org.springframework.lang.Nullable;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -21,4 +22,11 @@ public class TimeUtil {
     public static < T extends Comparable<T>> boolean isBetweenHalfOpen(T time, @Nullable T start, @Nullable T end) {
         return (start==null || time.compareTo(start) >= 0) && (end==null || time.compareTo(end) < 0);
     }
+
+    public static @Nullable LocalDate parseLocalDate(@Nullable String str) {
+            return StringUtils.hasLength(str) ? LocalDate.parse(str) : null;
+    }
+    public static @Nullable LocalTime parseLocalTime(@Nullable String str) {
+        return StringUtils.hasLength(str) ? LocalTime.parse(str) : null;
+        }
 }

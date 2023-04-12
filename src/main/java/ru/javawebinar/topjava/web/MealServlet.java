@@ -11,11 +11,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
 import static ru.javawebinar.topjava.util.MealsUtil.*;
+import static ru.javawebinar.topjava.util.TimeUtil.parseLocalDate;
+import static ru.javawebinar.topjava.util.TimeUtil.parseLocalTime;
 import static ru.javawebinar.topjava.web.SecurityUtil.*;
 
 public class MealServlet extends HttpServlet {
@@ -46,6 +50,15 @@ public class MealServlet extends HttpServlet {
                 logger.info("Delete {}", id);
                 repository.delete(id, authUserId());
                 resp.sendRedirect("meals");
+
+            case "filter":
+                LocalDate startDate = parseLocalDate(req.getParameter("startDate"));
+                LocalDate endDate = parseLocalDate(req.getParameter("endDate"));
+                LocalTime startTime = parseLocalTime(req.getParameter("startTime"));
+                LocalTime endTime = parseLocalTime(req.getParameter("endTime"));
+                req.setAttribute("meals", getTos(repository.getInInterval(authUserId(), LocalDateTime.of(startDate, startTime),
+                        LocalDateTime.of(endDate, endTime)), authUserCaloriesPerDay()));
+                req.getRequestDispatcher("/meals.jsp").forward(req, resp)   ;
                 break;
             case "all":
             default:

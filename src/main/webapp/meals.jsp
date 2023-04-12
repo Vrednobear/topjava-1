@@ -9,19 +9,33 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-	<title>Meal List</title>
-	<style>
-		.normal{
-			color: green;
-		}
-		.exceed{
-			color: red;
-		}
-	</style>
+	<title>Meals</title>
+	<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
+<h3><a href="index.html">Home</a></h3>
 <h2>Meals</h2>
+    <form method="get" action="meals">
+        <input type="hidden" name="action" value="filter">
+        <dl>
+            <dt>From Date (inclusive):</dt>
+            <dd><input type="date" name="startDate" value="${param.startDate}"></dd>
+        </dl>
+        <dl>
+            <dt>To Date (inclusive):</dt>
+            <dd><input type="date" name="endDate" value="${param.endDate}"></dd>
+        </dl>
+        <dl>
+            <dt>From Time (inclusive):</dt>
+            <dd><input type="time" name="startTime" value="${param.startTime}"></dd>
+        </dl>
+        <dl>
+            <dt>To Time (exclusive):</dt>
+            <dd><input type="time" name="endTime" value="${param.endTime}"></dd>
+        </dl>
+        <button type="submit">Filter</button>
+    </form>
 <a href="meals?action=create">Add meal</a>
 <br>
 <table border="1" cellpadding="8" cellspacing="0">
@@ -35,7 +49,7 @@
 	</thead>
 		<c:forEach items="${meals}" var="meal">
 			<jsp:useBean id="meal" type="ru.javawebinar.topjava.to.MealTo"/>
-			<tr class="${meal.excess ? 'exceed' : 'normal'}">
+			<tr data-meal-excess="${meal.excess}">
 				<td>${meal.date} ${meal.time}</td>
 				<td>${meal.description}</td>
 				<td>${meal.calories}</td>
