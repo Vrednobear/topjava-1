@@ -46,6 +46,7 @@ public class JdbcUserRepositoryImpl implements UserRepository {
 				.addValue("name", user.getName())
 				.addValue("email", user.getEmail())
 				.addValue("password", user.getPassword())
+				.addValue("caloriesPerDay", user.getCaloriesPerDay())
 				.addValue("registered", user.getRegistered())
 				.addValue("enabled", user.isEnabled());
 

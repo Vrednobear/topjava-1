@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import static ru.javawebinar.topjava.web.SecurityUtil.*;
-@Repository
+
 public class InMemoryUserRepository implements UserRepository {
 	Map<Integer, User> userRepository = new HashMap<>();
 	AtomicInteger counter = new AtomicInteger();

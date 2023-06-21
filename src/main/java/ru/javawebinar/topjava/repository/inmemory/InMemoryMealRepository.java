@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 
 import static ru.javawebinar.topjava.util.TimeUtil.isBetweenHalfOpen;
 
-@Repository
 public class InMemoryMealRepository implements MealRepository {
 	private final AtomicInteger counter = new AtomicInteger();
 	private final Map<Integer, Map<Integer, Meal>> repository = new ConcurrentHashMap<>();

@@ -21,6 +21,8 @@
         <slf4j.version>1.7.36</slf4j.version>
         <!--DB-->
         <postgresql.version>42.5.3</postgresql.version>
+        <!--Tests-->
+        <assertj.version>3.24.2</assertj.version>
     </properties>
 
     <build>
@@ -123,6 +125,13 @@
             <version>5.1.1.RELEASE</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>${assertj.version}</version>
+            <scope>test</scope>
+         </dependency>
+
 
         <!--DataBase-->
         <dependency>

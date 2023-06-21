@@ -15,7 +15,7 @@ import java.util.Properties;
 
 @Configuration
 @PropertySource("classpath:/db/postgres.properties")
-public class SpringConfiguration {
+public class DbConfiguration {
 
     @Bean
     public DataSource dataSource(@Value("${database.url}") String url,
