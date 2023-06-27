@@ -10,6 +10,7 @@ import ru.javawebinar.topjava.to.MealTo;
 import ru.javawebinar.topjava.util.MealsUtil;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Collection;
 import java.util.List;
@@ -32,7 +33,7 @@ public class MealRestController {
                 authUserCaloriesPerDay());
     }
 
-    public List<MealTo> getInInterval(LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime) {
+    public List<MealTo> getInInterval(LocalDateTime startDate, LocalDateTime endDate, LocalTime startTime, LocalTime endTime) {
         log.info("get meals between {} {} and {} {} for user {}", startDate, startTime, endDate, endTime, authUserId());
         List<Meal> filteredByDate = service.getInInterval(authUserId(), startDate, endDate);
         return MealsUtil.getFilteredTos(filteredByDate, startTime, endTime, authUserCaloriesPerDay());

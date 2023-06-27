@@ -71,7 +71,7 @@ public class UserServiceTest {
     public void update() {
         User updated = getUpdated();
         service.update(updated);
-        assertMatch(service.get(USER_ID), updated);
+        assertMatch(service.get(USER_ID), getUpdated());
 
     }
 }

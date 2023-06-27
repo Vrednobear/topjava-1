@@ -23,3 +23,18 @@ CREATE TABLE user_role
     CONSTRAINT user_roles_idx UNIQUE (user_id, role),
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
+
+CREATE TABLE meals
+(
+    id          INTEGER DEFAULT nextval('global_seq'),
+    date_time   TIMESTAMP NOT NULL,
+    description VARCHAR   NOT NULL,
+    calories    INTEGER   NOT NULL,
+    user_id     INTEGER   NOT NULL,
+    CONSTRAINT meals_idx PRIMARY KEY (id),
+    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+);
+
+CREATE UNIQUE INDEX meals_unique_date_time ON meals (user_id, date_time);
+
+SELECT * FROM meals WHERE user_id=100000 AND (date_time>='2023-06-19 09:00:00.000000' AND date_time<'2023-06-19 23:00:00.000000');

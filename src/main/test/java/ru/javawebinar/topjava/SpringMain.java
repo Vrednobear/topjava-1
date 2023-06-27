@@ -24,14 +24,14 @@ public class SpringMain {
 //        userService.create(new User(null, "userName", "email@mail.ru", "password", Role.ADMIN));
 //        appCtx.close();
 
-        try (ConfigurableApplicationContext appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml"))
-        {
-            System.out.println("Bean definition names: " + Arrays.toString(appCtx.getBeanDefinitionNames()));
-            AdminRestController adminUserController = appCtx.getBean(AdminRestController.class);
-            adminUserController.create(new User(null, "userName", "email@mail.ru", "password", Role.ADMIN));
-
-            MealRestController mealRestController = appCtx.getBean(MealRestController.class);
-            mealRestController.create(new Meal(LocalDateTime.now(),"From main", 600, 1));
-        }
+//        try (ConfigurableApplicationContext appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml"))
+//        {
+//            System.out.println("Bean definition names: " + Arrays.toString(appCtx.getBeanDefinitionNames()));
+//            AdminRestController adminUserController = appCtx.getBean(AdminRestController.class);
+//            adminUserController.create(new User(null, "userName", "email@mail.ru", "password", Role.ADMIN));
+//
+//            MealRestController mealRestController = appCtx.getBean(MealRestController.class);
+//            mealRestController.create(new Meal(LocalDateTime.now(),"From main", 600, 1));
+//        }
     }
 }
