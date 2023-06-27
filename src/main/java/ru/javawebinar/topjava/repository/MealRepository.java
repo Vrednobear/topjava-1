@@ -12,7 +12,7 @@ public interface MealRepository {
 
     public Meal get(int id, int userId);
 
-    public Meal delete(int id, int userId);
+    public boolean delete(int id, int userId);
 
     public List<Meal> getAll(int userId);
 

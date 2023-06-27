@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -41,6 +42,8 @@ public class JdbcUserRepositoryImpl implements UserRepository {
 
 	@Override
 	public User save(User user) {
+		//Map can be substituted by
+		//BeanPropertySqlParameterSource source = new BeanPropertySqlParameterSource(user);
 		MapSqlParameterSource parameterMap = new MapSqlParameterSource()
 				.addValue("id", user.getId())
 				.addValue("name", user.getName())

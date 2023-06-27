@@ -6,24 +6,25 @@ import java.time.LocalTime;
 
 public class Meal extends AbstractBaseEntity {
 
-    private final LocalDateTime dateTime;
+    private LocalDateTime dateTime;
+    private String description;
+    private int calories;
 
-    private final String description;
+    public Meal(){}
 
-    private final int calories;
-
-    private final int userId;
-
-    public Meal(LocalDateTime dateTime, String description, int calories, int userId) {
-        this(null, dateTime, description, calories, userId);
+    public Meal(Meal meal){
+        this(meal.getId(), meal.getDateTime(), meal.getDescription(), meal.getCalories());
     }
 
-    public Meal(Integer id, LocalDateTime dateTime, String description, int calories, int userId) {
+    public Meal(LocalDateTime dateTime, String description, int calories) {
+        this(null, dateTime, description, calories);
+    }
+
+    public Meal(Integer id, LocalDateTime dateTime, String description, int calories) {
         super(id);
         this.dateTime = dateTime;
         this.description = description;
         this.calories = calories;
-        this.userId = userId;
     }
 
     public LocalDateTime getDateTime() {
@@ -50,6 +51,18 @@ public class Meal extends AbstractBaseEntity {
         return id;
     }
 
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setCalories(int calories) {
+        this.calories = calories;
+    }
+
     public void  setId(Integer id){
         this.id = id;
     }
@@ -58,9 +71,6 @@ public class Meal extends AbstractBaseEntity {
        return id == null;
     }
 
-    public int getUserId() {
-        return userId;
-    }
 
     @Override
     public String toString() {
@@ -69,7 +79,6 @@ public class Meal extends AbstractBaseEntity {
                 ", dateTime=" + dateTime +
                 ", description='" + description + '\'' +
                 ", calories=" + calories +
-                ", userId=" + userId +
                 '}';
     }
 }

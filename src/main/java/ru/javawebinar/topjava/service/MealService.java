@@ -31,7 +31,7 @@ public class MealService {
     }
 
     public void delete(int id, int userId) {
-        checkNotFoundWithId(repository.delete(id,userId), id);
+        checkNotFoundWithId(repository.delete(id, userId), id);
     }
 
     public Meal get(int id, int userId) {
@@ -46,8 +46,8 @@ public class MealService {
         checkNotFoundWithId(repository.save(meal, userId), meal.getId());
     }
 
-    public List<Meal> getInInterval(int userId, @Nullable LocalDate startTime, @Nullable LocalDate endTime) {
-        return repository.getInInterval(userId, getStartInclusive(startTime), getEndExclusive(endTime));
+    public List<Meal> getInInterval(int userId, @Nullable LocalDateTime startTime, @Nullable LocalDateTime endTime) {
+        return repository.getInInterval(userId, startTime, endTime);
     }
 
 }
