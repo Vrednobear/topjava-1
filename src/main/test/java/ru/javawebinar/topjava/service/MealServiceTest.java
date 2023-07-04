@@ -36,7 +36,7 @@ public class MealServiceTest {
     @Test
     public void create() {
         Meal mealSaved = service.create(getNewMeal(), USER_ID);
-        int id = mealSaved.getId();
+        int id = mealSaved.getIdNotNull();
         Meal newMeal = getNewMeal();
         newMeal.setId(id);
         Assertions.assertThat(mealSaved).isEqualToComparingFieldByFieldRecursively(newMeal);
