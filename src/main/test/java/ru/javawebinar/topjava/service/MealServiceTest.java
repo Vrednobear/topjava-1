@@ -39,7 +39,7 @@ public class MealServiceTest {
         int id = mealSaved.getIdNotNull();
         Meal newMeal = getNewMeal();
         newMeal.setId(id);
-        Assertions.assertThat(mealSaved).isEqualToComparingFieldByFieldRecursively(newMeal);
+        Assertions.assertThat(mealSaved).usingRecursiveComparison().ignoringFields("user").isEqualTo(newMeal);
     }
 
     @Test
@@ -53,7 +53,7 @@ public class MealServiceTest {
     @Test
     public void get() {
         Meal meal = service.get(MEAL_1.getId(), USER_ID);
-        Assertions.assertThat(meal).isEqualToComparingFieldByFieldRecursively(MEAL_1);
+        Assertions.assertThat(meal).usingRecursiveComparison().ignoringFields("user").isEqualTo(MEAL_1);
     }
 
     @Test
@@ -65,14 +65,19 @@ public class MealServiceTest {
     @Test
     public void getAll() {
         List<Meal> all = service.getAll(USER_ID);
-        Assertions.assertThat(USER_MEAL_LIST).usingRecursiveFieldByFieldElementComparator().isEqualTo(USER_MEAL_LIST);
+        Assertions.assertThat(USER_MEAL_LIST)
+                .usingRecursiveFieldByFieldElementComparatorIgnoringFields("user")
+                .isEqualTo(USER_MEAL_LIST);
     }
 
     @Test
     public void update() {
         Meal updated = MealTestData.getUpdated();
         service.update(updated, USER_ID);
-        Assertions.assertThat(service.get(MEAL_1.getId(),USER_ID)).isEqualToComparingFieldByFieldRecursively(updated);
+        Assertions.assertThat(service.get(MEAL_1.getId(),USER_ID))
+                .usingRecursiveComparison()
+                .ignoringFields("user")
+                .isEqualTo(updated);
     }
 
     @Test
@@ -80,7 +85,9 @@ public class MealServiceTest {
         //From 9 till 16:30
         List<Meal> filtered = service.getInInterval(ADMIN_ID, LocalDateTime.of(2023, 6, 20, 10, 30),
                 LocalDateTime.of(2023, 6, 20, 16, 30));
-        Assertions.assertThat(filtered).usingRecursiveFieldByFieldElementComparator().isEqualTo(ADMIN_MEAL_LIST_INTERVAL);
+        Assertions.assertThat(filtered)
+                .usingRecursiveFieldByFieldElementComparatorIgnoringFields("user")
+                .isEqualTo(ADMIN_MEAL_LIST_INTERVAL);
 
     }
 }

@@ -8,13 +8,14 @@ import java.util.Collection;
 import java.util.List;
 
 public interface MealRepository {
-    public Meal save(Meal meal, int userId);
 
-    public Meal get(int id, int userId);
+    Meal save(Meal meal, int userId);
 
-    public boolean delete(int id, int userId);
+    Meal get(int id, int userId);
 
-    public List<Meal> getAll(int userId);
+    boolean delete(int id, int userId);
 
-    public List<Meal> getInInterval(int userId, LocalDateTime startTime, LocalDateTime endTime);
+    List<Meal> getAll(int userId);
+
+    List<Meal> getInInterval(int userId, LocalDateTime startTime, LocalDateTime endTime);
 }

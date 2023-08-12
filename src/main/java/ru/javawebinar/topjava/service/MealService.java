@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -23,7 +24,7 @@ public class MealService {
     private MealRepository repository;
 
     @Autowired
-    public MealService(MealRepository repository) {
+    public MealService(@Qualifier("jpa") MealRepository repository) {
         this.repository = repository;
     }
 

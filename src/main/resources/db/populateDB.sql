@@ -17,3 +17,9 @@ VALUES ('2023-06-19 10:00:00', 'breakfast',1000,100000),
        ('2023-06-19 20:00:00', 'dinner', 500, 100000),
        ('2023-06-20 11:20:00', 'breakfast', 1200, 100001),
        ('2023-06-20 16:30:00', 'dinner', 700, 100001);
+
+SELECT description, SUM(calories) sum FROM MEALS
+GROUP BY description
+HAVING Sum(calories) > 1000;
+
+Select * from users u natural join meals m;

@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import ru.javawebinar.topjava.model.User;
@@ -17,7 +18,7 @@ public class UserService {
     private UserRepository repository;
 
     @Autowired
-    public UserService(UserRepository repository) {
+    public UserService(@Qualifier("jpa") UserRepository repository) {
         this.repository = repository;
     }
 
