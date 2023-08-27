@@ -44,10 +44,10 @@ public class User extends AbstractNamedEntity {
 	@Column(name = "registered", columnDefinition = "timestamp default now()")
 	private Date registered = new Date();
 
-	@Enumerated(EnumType.STRING)
-	@CollectionTable(name = "USER_ROLE", joinColumns = @JoinColumn(name = "user_id"))
-	@Column(name = "role")
 	@ElementCollection(fetch = FetchType.EAGER)
+	@CollectionTable(name = "USER_ROLE", joinColumns = @JoinColumn(name = "user_id"))
+	@Enumerated(EnumType.STRING)
+	@Column(name = "role")
 	private Set<Role> roles;
 
 	@Column(name = "calories_per_day", nullable = false, columnDefinition = "integer default 2000")

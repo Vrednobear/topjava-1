@@ -49,6 +49,7 @@ public class HibernateMealRepositoryImpl implements MealRepository {
     @Transactional
     public boolean delete(int id, int userId) {
         Query namedQuery = entityManager.createNamedQuery(Meal.DELETE);
+        List<Meal> all = getAll(userId);
         namedQuery.setParameter("id", id);
         namedQuery.setParameter("userId", userId);
         return namedQuery.executeUpdate() != 0;

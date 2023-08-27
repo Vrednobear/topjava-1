@@ -1,9 +1,11 @@
 package ru.javawebinar.topjava.service;
 
+import org.ehcache.CacheManager;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
@@ -22,10 +24,14 @@ import static ru.javawebinar.topjava.UserTestData.*;
 @ContextConfiguration(classes = {DbConfiguration.class, AppConfiguration.class})
 @RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
+@ActiveProfiles("Prod")
 public class UserServiceTest {
 
     @Autowired
     UserService service;
+
+    //@Autowired
+    //CacheManager manager;
 
     @Test
     public void create() {
