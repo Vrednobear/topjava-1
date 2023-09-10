@@ -10,26 +10,22 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.javawebinar.topjava.MealTestData;
-import ru.javawebinar.topjava.config.AppConfiguration;
 import ru.javawebinar.topjava.config.DbConfiguration;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.to.MealTo;
-import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThrows;
 import static ru.javawebinar.topjava.MealTestData.*;
 import static ru.javawebinar.topjava.UserTestData.*;
 
-@ContextConfiguration(classes = {AppConfiguration.class, DbConfiguration.class})
+@ContextConfiguration(classes = DbConfiguration.class)
 @RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
-@ActiveProfiles("Prod")
+//@ActiveProfiles(resolver = ActiveDbProfileResolver.class, profiles = {"data", "jdbc"})
+@ActiveProfiles(profiles = {"Test", "data", "jdbc"})
 public class MealServiceTest {
 
     @Autowired
@@ -67,7 +63,7 @@ public class MealServiceTest {
     @Test
     public void getAll() {
         List<Meal> all = service.getAll(USER_ID);
-        Assertions.assertThat(USER_MEAL_LIST)
+        Assertions.assertThat(all)
                 .usingRecursiveFieldByFieldElementComparatorIgnoringFields("user")
                 .isEqualTo(USER_MEAL_LIST);
     }
@@ -91,5 +87,12 @@ public class MealServiceTest {
                 .usingRecursiveFieldByFieldElementComparatorIgnoringFields("user")
                 .isEqualTo(ADMIN_MEAL_LIST_INTERVAL);
 
+    }
+
+    @Test
+    public void getWithUser(){
+        Meal withUser = service.getWithUser(MEAL_1.getId(), USER_ID);
+        Assertions.assertThat(withUser).usingRecursiveComparison().ignoringFields("user").isEqualTo(MEAL_1);
+        assertMatch(withUser.getUser(),USER);
     }
 }

@@ -12,7 +12,7 @@ import java.util.List;
 
 @Repository
 @Qualifier("jpa")
-@Transactional
+@Transactional(readOnly = true)
 public class HibernateUserRepositoryImpl implements UserRepository {
 
     @PersistenceContext

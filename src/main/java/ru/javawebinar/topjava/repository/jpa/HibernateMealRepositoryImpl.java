@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-@Transactional
+@Transactional(readOnly = true)
 @Qualifier("jpa")
 public class HibernateMealRepositoryImpl implements MealRepository {
 

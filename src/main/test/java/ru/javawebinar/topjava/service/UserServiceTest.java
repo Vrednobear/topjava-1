@@ -1,16 +1,17 @@
 package ru.javawebinar.topjava.service;
 
-import org.ehcache.CacheManager;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.jcache.JCacheCacheManager;
 import org.springframework.dao.DataAccessException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
-import ru.javawebinar.topjava.config.AppConfiguration;
+import ru.javawebinar.topjava.config.CacheConfig;
 import ru.javawebinar.topjava.config.DbConfiguration;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
@@ -21,17 +22,24 @@ import java.util.List;
 import static org.junit.Assert.assertThrows;
 import static ru.javawebinar.topjava.UserTestData.*;
 
-@ContextConfiguration(classes = {DbConfiguration.class, AppConfiguration.class})
+@ContextConfiguration(classes = {DbConfiguration.class, CacheConfig.class})
 @RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
-@ActiveProfiles("Prod")
+//@ActiveProfiles(resolver = ActiveDbProfileResolver.class)
+@ActiveProfiles(profiles = {"Test", "data", "jdbc"})
 public class UserServiceTest {
 
     @Autowired
     UserService service;
 
-    //@Autowired
-    //CacheManager manager;
+    @Autowired
+    JCacheCacheManager manager;
+
+    @Before
+    public void setup()
+    {
+        manager.getCache("users").clear();
+    }
 
     @Test
     public void create() {
@@ -79,5 +87,11 @@ public class UserServiceTest {
         service.update(updated);
         assertMatch(service.get(USER_ID), getUpdated());
 
+    }
+
+    @Test
+    public void getWithMeals(){
+        User withMeals = service.getWithMeals(ADMIN_ID);
+        assertMatch(withMeals, ADMIN);
     }
 }

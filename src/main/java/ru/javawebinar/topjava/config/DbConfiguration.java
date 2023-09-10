@@ -1,10 +1,8 @@
 package ru.javawebinar.topjava.config;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.*;
 import org.springframework.core.io.Resource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -15,7 +13,6 @@ import org.springframework.jdbc.datasource.init.DatabasePopulator;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.orm.jpa.LocalEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -24,6 +21,8 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
+@ComponentScan(basePackages={"ru.javawebinar.topjava.service",
+        "ru.javawebinar.topjava.repository", "ru.javawebinar.topjava.web"})
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackages = "ru.javawebinar.topjava.repository")
 @PropertySource({"classpath:/db/postgres.properties", "classpath:/db/hsqlDB.properties"})
@@ -38,32 +37,32 @@ public class DbConfiguration {
     @Value("classpath:db/initHsqlDB.sql")
     Resource hqslInitScript;
 
-    @Bean
-    @Profile("Prod")
-    public DataSource dataSource(@Value("${database.url}") String url,
-                                                             @Value("${database.username}") String userName,
-                                                             @Value("${database.password}") String password)
-    {
-        org.apache.tomcat.jdbc.pool.DataSource dataSource = new  org.apache.tomcat.jdbc.pool.DataSource();
-        dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUrl(url);
-        dataSource.setUsername(userName);
-        dataSource.setPassword(password);
+//    @Bean
+//    @Profile("Prod")
+//    public DataSource dataSource(@Value("${database.url}") String url,
+//                                 @Value("${database.username}") String userName,
+//                                 @Value("${database.password}") String password)
+//    {
+//        org.apache.tomcat.jdbc.pool.DataSource dataSource = new  org.apache.tomcat.jdbc.pool.DataSource();
+//        dataSource.setDriverClassName("org.postgresql.Driver");
+//        dataSource.setUrl(url);
+//        dataSource.setUsername(userName);
+//        dataSource.setPassword(password);
+//
+//        return dataSource;
+//    }
 
-        return dataSource;
-    }
-
-    @Bean
-    @Profile("Prod")
-    public DatabasePopulator databasePopulator() {
-        ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
-        populator.addScripts(initScript, populateScript);
-        return populator;
-    }
+//    @Bean
+//    @Profile("Prod")
+//    public DatabasePopulator databasePopulator() {
+//        ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
+//        populator.addScripts(initScript, populateScript);
+//        return populator;
+//    }
 
     @Bean
     @Profile("Test")
-    public DataSource testDataSource(@Value("${hsql.url}") String url,
+    public DataSource dataSource(@Value("${hsql.url}") String url,
                                      @Value("${hsql.username}") String userName,
                                      @Value("${hsql.password}") String password)
     {
@@ -78,7 +77,7 @@ public class DbConfiguration {
 
     @Bean
     @Profile("Test")
-    public DatabasePopulator testDatabasePopulator() {
+    public DatabasePopulator databasePopulator() {
         ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
         populator.addScripts(hqslInitScript, populateScript);
         return populator;
@@ -86,7 +85,8 @@ public class DbConfiguration {
 
     @Bean
     public DataSourceInitializer dataSourceInitializer(
-            DataSource dataSource, DatabasePopulator databasePopulator) {
+            @Qualifier("dataSource") DataSource dataSource, @Qualifier("databasePopulator") DatabasePopulator databasePopulator)
+    {
         DataSourceInitializer initializer = new DataSourceInitializer();
         initializer.setDataSource(dataSource);
         initializer.setEnabled(true);
@@ -95,7 +95,9 @@ public class DbConfiguration {
     }
 
     @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource){
+    @Profile({"jpa", "data"})
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(@Qualifier("dataSource") DataSource dataSource)
+    {
         LocalContainerEntityManagerFactoryBean bean = new LocalContainerEntityManagerFactoryBean();
         bean.setDataSource(dataSource);
         bean.setPackagesToScan("ru.javawebinar.**.model");
@@ -106,6 +108,7 @@ public class DbConfiguration {
         return bean;
     }
 
+    @Profile({"jpa", "data"})
     Properties hibernateProperties()
     {
         Properties hibernateProps = new Properties();
@@ -116,22 +119,26 @@ public class DbConfiguration {
     }
 
     @Bean
-    public JpaTransactionManager transactionManager(EntityManagerFactory entityManagerFactory){
+    @Profile({"jpa", "data"})
+    public JpaTransactionManager transactionManager(EntityManagerFactory entityManagerFactory)
+    {
         JpaTransactionManager jpaTransactionManager = new JpaTransactionManager();
         jpaTransactionManager.setEntityManagerFactory(entityManagerFactory);
         return jpaTransactionManager;
     }
 
     @Bean
-    public NamedParameterJdbcTemplate namedParameterJdbcTemplate(DataSource dataSource){
+    @Profile("jdbc")
+    public NamedParameterJdbcTemplate namedParameterJdbcTemplate(@Qualifier("dataSource") DataSource dataSource)
+    {
         return new NamedParameterJdbcTemplate(dataSource);
     }
 
     @Bean
-    public JdbcTemplate jdbcTemplate(DataSource dataSource){
+    @Profile("jdbc")
+    public JdbcTemplate jdbcTemplate(@Qualifier("dataSource")DataSource dataSource)
+    {
         return new JdbcTemplate(dataSource);
     }
-
-
 
 }

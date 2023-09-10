@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-@Qualifier("springJdbc")
+@Qualifier("jdbc")
 public class JdbcMealRepositoryImpl implements MealRepository {
 
 	private final JdbcTemplate jdbcTemplate;

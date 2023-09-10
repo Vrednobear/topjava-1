@@ -56,4 +56,8 @@ public class MealService {
         return repository.getInInterval(userId, startTime, endTime);
     }
 
+    public Meal getWithUser(int id, int userId){
+       return checkNotFoundWithId(repository.getWithUser(id, userId), id);
+    }
+
 }

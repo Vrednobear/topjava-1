@@ -18,4 +18,8 @@ public interface MealRepository {
     List<Meal> getAll(int userId);
 
     List<Meal> getInInterval(int userId, LocalDateTime startTime, LocalDateTime endTime);
+
+    default Meal getWithUser(int id, int userId) {
+        throw new UnsupportedOperationException();
+    }
 }

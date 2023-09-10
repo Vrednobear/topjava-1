@@ -17,6 +17,9 @@ public class MealTestData {
     public static final Meal MEAL_4 = new Meal(START_SEQ + 5,LocalDateTime.of(2023,6,20, 11,20),"breakfast",1200);
     public static final Meal MEAL_5 = new Meal(START_SEQ + 6,LocalDateTime.of(2023,6,20, 16,30),"dinner",700);
 
+    public static final Meal MEAL_WITH_USER = new Meal(
+            START_SEQ + 7,LocalDateTime.of(2023,6,20, 16,30),"dinner",700);
+
     public static final List<Meal> USER_MEAL_LIST = Arrays.asList(MEAL_1, MEAL_2, MEAL_3);
     public static final List<Meal> ADMIN_MEAL_LIST = Arrays.asList(MEAL_4, MEAL_5);
     public static final List<Meal> ADMIN_MEAL_LIST_INTERVAL = Arrays.asList(MEAL_4);

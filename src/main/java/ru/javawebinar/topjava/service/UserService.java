@@ -20,7 +20,6 @@ public class UserService {
     private UserRepository repository;
 
     @Autowired
-   // public UserService(@Qualifier("jpa") UserRepository repository) {
     public UserService(@Qualifier("data") UserRepository repository) {
         this.repository = repository;
     }
@@ -53,5 +52,9 @@ public class UserService {
     public void update(User user) {
         Assert.notNull(user, "user must not be null");
         checkNotFoundWithId(repository.save(user), user.getIdNotNull());
+    }
+
+    public User getWithMeals(int id){
+        return checkNotFoundWithId(repository.getWithMeals(id), id);
     }
 }
