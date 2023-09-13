@@ -15,6 +15,7 @@ import ru.javawebinar.topjava.config.CacheConfig;
 import ru.javawebinar.topjava.config.DbConfiguration;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
+import ru.javawebinar.topjava.repository.JpaUtil;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.util.List;
@@ -26,7 +27,7 @@ import static ru.javawebinar.topjava.UserTestData.*;
 @RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 //@ActiveProfiles(resolver = ActiveDbProfileResolver.class)
-@ActiveProfiles(profiles = {"Test", "data", "jdbc"})
+@ActiveProfiles(profiles = {"Prod", "data", "jdbc"})
 public class UserServiceTest {
 
     @Autowired
@@ -35,10 +36,15 @@ public class UserServiceTest {
     @Autowired
     JCacheCacheManager manager;
 
+    @Autowired
+    JpaUtil jpaUtil;
+
     @Before
     public void setup()
     {
         manager.getCache("users").clear();
+        jpaUtil.clear2ndLevelHibernateCache();
+
     }
 
     @Test

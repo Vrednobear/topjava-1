@@ -37,32 +37,32 @@ public class DbConfiguration {
     @Value("classpath:db/initHsqlDB.sql")
     Resource hqslInitScript;
 
-//    @Bean
-//    @Profile("Prod")
-//    public DataSource dataSource(@Value("${database.url}") String url,
-//                                 @Value("${database.username}") String userName,
-//                                 @Value("${database.password}") String password)
-//    {
-//        org.apache.tomcat.jdbc.pool.DataSource dataSource = new  org.apache.tomcat.jdbc.pool.DataSource();
-//        dataSource.setDriverClassName("org.postgresql.Driver");
-//        dataSource.setUrl(url);
-//        dataSource.setUsername(userName);
-//        dataSource.setPassword(password);
-//
-//        return dataSource;
-//    }
+    @Bean
+    @Profile("Prod")
+    public DataSource dataSource(@Value("${database.url}") String url,
+                                 @Value("${database.username}") String userName,
+                                 @Value("${database.password}") String password)
+    {
+        org.apache.tomcat.jdbc.pool.DataSource dataSource = new  org.apache.tomcat.jdbc.pool.DataSource();
+        dataSource.setDriverClassName("org.postgresql.Driver");
+        dataSource.setUrl(url);
+        dataSource.setUsername(userName);
+        dataSource.setPassword(password);
 
-//    @Bean
-//    @Profile("Prod")
-//    public DatabasePopulator databasePopulator() {
-//        ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
-//        populator.addScripts(initScript, populateScript);
-//        return populator;
-//    }
+        return dataSource;
+    }
+
+    @Bean
+    @Profile("Prod")
+    public DatabasePopulator databasePopulator() {
+        ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
+        populator.addScripts(initScript, populateScript);
+        return populator;
+    }
 
     @Bean
     @Profile("Test")
-    public DataSource dataSource(@Value("${hsql.url}") String url,
+    public DataSource testDataSource(@Value("${hsql.url}") String url,
                                      @Value("${hsql.username}") String userName,
                                      @Value("${hsql.password}") String password)
     {
@@ -77,7 +77,7 @@ public class DbConfiguration {
 
     @Bean
     @Profile("Test")
-    public DatabasePopulator databasePopulator() {
+    public DatabasePopulator testDatabasePopulator() {
         ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
         populator.addScripts(hqslInitScript, populateScript);
         return populator;
@@ -115,6 +115,10 @@ public class DbConfiguration {
         hibernateProps.setProperty("hibernate.format_sql", "true");
         hibernateProps.setProperty("hibernate.use_sql_comments", "true");
 //        hibernateProps.setProperty("hibernate.hbm2ddl.auto", "true");
+        hibernateProps.setProperty("hibernate.cache.provider_configuration_file_resource_path", "cache/ehcache.xml");
+        hibernateProps.setProperty("hibernate.cache.use_second_level_cache", "true");
+        hibernateProps.setProperty("hibernate.cache.region.factory_class", "org.hibernate.cache.jcache.internal.JCacheRegionFactory");
+
         return hibernateProps;
     }
 

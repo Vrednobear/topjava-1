@@ -25,7 +25,7 @@ import static ru.javawebinar.topjava.UserTestData.*;
 @RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 //@ActiveProfiles(resolver = ActiveDbProfileResolver.class, profiles = {"data", "jdbc"})
-@ActiveProfiles(profiles = {"Test", "data", "jdbc"})
+@ActiveProfiles(profiles = {"Prod", "data", "jdbc"})
 public class MealServiceTest {
 
     @Autowired
