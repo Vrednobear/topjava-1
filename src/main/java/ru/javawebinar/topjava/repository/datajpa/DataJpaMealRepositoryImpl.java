@@ -1,9 +1,12 @@
 package ru.javawebinar.topjava.repository.datajpa;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
+import ru.javawebinar.topjava.service.MealService;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -11,6 +14,10 @@ import java.util.List;
 @Repository
 @Qualifier("data")
 public class DataJpaMealRepositoryImpl implements MealRepository {
+
+	@Lazy
+	@Autowired
+	MealService mealService;
 
 	private final ProxyMealRepository proxyMealRepository;
 

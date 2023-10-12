@@ -22,7 +22,7 @@ import java.util.Properties;
 
 @Configuration
 @ComponentScan(basePackages={"ru.javawebinar.topjava.service",
-        "ru.javawebinar.topjava.repository", "ru.javawebinar.topjava.web"})
+        "ru.javawebinar.topjava.repository"})
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackages = "ru.javawebinar.topjava.repository")
 @PropertySource({"classpath:/db/postgres.properties", "classpath:/db/hsqlDB.properties"})

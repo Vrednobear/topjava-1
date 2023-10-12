@@ -2,6 +2,8 @@ package ru.javawebinar.topjava.model;
 
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.util.CollectionUtils;
@@ -46,10 +48,10 @@ public class User extends AbstractNamedEntity {
 	@Column(name = "registered", columnDefinition = "timestamp default now()")
 	private Date registered = new Date();
 
-	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "USER_ROLE", joinColumns = @JoinColumn(name = "user_id"))
 	@Enumerated(EnumType.STRING)
 	@Column(name = "role")
+	@ElementCollection(fetch = FetchType.EAGER)
 	@BatchSize(size = 200)
 	@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 	private Set<Role> roles;
@@ -60,6 +62,7 @@ public class User extends AbstractNamedEntity {
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
 	@OrderBy("dateTime DESC")
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private List<Meal> meals;
 
 	public User() {
