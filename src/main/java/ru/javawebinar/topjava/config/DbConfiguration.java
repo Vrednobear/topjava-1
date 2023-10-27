@@ -1,6 +1,5 @@
 package ru.javawebinar.topjava.config;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import org.springframework.core.io.Resource;
@@ -11,6 +10,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.jdbc.datasource.init.DatabasePopulator;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
+import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
@@ -53,7 +53,7 @@ public class DbConfiguration {
     }
 
     @Bean
-    @Profile("Prod")
+    @Profile({"Prod", "Tomcat"})
     public DatabasePopulator databasePopulator() {
         ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
         populator.addScripts(initScript, populateScript);
@@ -75,6 +75,28 @@ public class DbConfiguration {
         return dataSource;
     }
 
+
+    @Profile("Tomcat")
+    @Bean
+    public DataSource tomcatDataSource() {
+        JndiDataSourceLookup jndi = new JndiDataSourceLookup();
+        jndi.setJndiEnvironment(tomcatProperties());
+        DataSource dataSource = jndi.getDataSource("java:comp/env/jdbc/topjava");
+        return dataSource;
+    }
+
+    @Profile({"Tomcat"})
+    Properties tomcatProperties()
+    {
+        Properties tomcatProps = new Properties();
+        tomcatProps.setProperty("hibernate.format_sql", "true");
+        tomcatProps.setProperty("hibernate.use_sql_comments", "true");
+        tomcatProps.setProperty("database.init", "false");
+        tomcatProps.setProperty("jdbc.initLocation", "initDB.sql");
+        tomcatProps.setProperty("jpa.showSql", "true");
+        return tomcatProps;
+    }
+
     @Bean
     @Profile("Test")
     public DatabasePopulator testDatabasePopulator() {
@@ -85,7 +107,8 @@ public class DbConfiguration {
 
     @Bean
     public DataSourceInitializer dataSourceInitializer(
-            @Qualifier("dataSource") DataSource dataSource, @Qualifier("databasePopulator") DatabasePopulator databasePopulator)
+           // @Qualifier("dataSource") DataSource dataSource, @Qualifier("databasePopulator") DatabasePopulator databasePopulator)
+           DataSource dataSource, DatabasePopulator databasePopulator)
     {
         DataSourceInitializer initializer = new DataSourceInitializer();
         initializer.setDataSource(dataSource);
@@ -96,7 +119,8 @@ public class DbConfiguration {
 
     @Bean
     @Profile({"jpa", "data"})
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory(@Qualifier("dataSource") DataSource dataSource)
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource)
+            //@Qualifier("dataSource") DataSource dataSource)
     {
         LocalContainerEntityManagerFactoryBean bean = new LocalContainerEntityManagerFactoryBean();
         bean.setDataSource(dataSource);
@@ -118,7 +142,7 @@ public class DbConfiguration {
         hibernateProps.setProperty("hibernate.cache.provider_configuration_file_resource_path", "cache/ehcache.xml");
         hibernateProps.setProperty("hibernate.cache.use_second_level_cache", "true");
         hibernateProps.setProperty("hibernate.cache.region.factory_class", "org.hibernate.cache.jcache.internal.JCacheRegionFactory");
-
+        hibernateProps.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
         return hibernateProps;
     }
 
@@ -133,14 +157,16 @@ public class DbConfiguration {
 
     @Bean
     @Profile("jdbc")
-    public NamedParameterJdbcTemplate namedParameterJdbcTemplate(@Qualifier("dataSource") DataSource dataSource)
+    public NamedParameterJdbcTemplate namedParameterJdbcTemplate(DataSource dataSource)
+            //@Qualifier("dataSource") DataSource dataSource)
     {
         return new NamedParameterJdbcTemplate(dataSource);
     }
 
     @Bean
     @Profile("jdbc")
-    public JdbcTemplate jdbcTemplate(@Qualifier("dataSource")DataSource dataSource)
+    public JdbcTemplate jdbcTemplate(DataSource dataSource)
+            //@Qualifier("dataSource")DataSource dataSource)
     {
         return new JdbcTemplate(dataSource);
     }

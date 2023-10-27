@@ -17,14 +17,15 @@ public class SecurityUtil {
     public static final User guest = new User(GUEST_ID, "Guest", "guest@gmail.com", "guest");
 
     public static int authUserId() {
-        return 1;
+        return 100000;
     }
 
     public static int authUserCaloriesPerDay() {
         return DEFAULT_CALORIES_PER_DAY;
     }
 
-    public static void setAuthUserId(int userId){
-
+    public static void setAuthUserId(int userId)
+    {
+        user.setId(userId);
     }
 }

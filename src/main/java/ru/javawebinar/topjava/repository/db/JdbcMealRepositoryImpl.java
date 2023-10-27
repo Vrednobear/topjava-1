@@ -2,6 +2,7 @@ package ru.javawebinar.topjava.repository.db;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Profile;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
+@Profile("jdbc")
 @Qualifier("jdbc")
 public class JdbcMealRepositoryImpl implements MealRepository {
 
